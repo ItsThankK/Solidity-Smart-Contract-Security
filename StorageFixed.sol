@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: MIT
 
-/// @audit Updated Compiler version to 0.8.18
+/// Updated Compiler version to 0.8.18
 pragma solidity 0.8.18;
 
 /**
@@ -21,73 +21,24 @@ contract StorageFixed {
 
     mapping(address => Storage) storages;
 
-    /// Fixed initialization by use a constructor function.
+    /// Fixed initialization by using a constructor function.
     constructor() {
         owner = msg.sender;
     }
 
-    function store(uint256 amount) public {
+    function storeAmount(uint256 amount) public {
 
-        /// Fixed uninitialized storage pointer from "Storage str" to "Storage memory str"
-        Storage memory str;
+        /// Fixed uninitialized storage pointer by adding memory keyword
+        Storage memory str = Storage(msg.sender, 0); ///Initilised local variable here! 
 
         str.user = msg.sender;
         str.amount = amount;
         storages[msg.sender] = str;
     }
 
-    function getStore() public view returns (address, uint256) {
+    function getStoreAmount() public view returns (address, uint256) {
 
-        /// Fixed uninitialized storage pointer from "Storage str" to "Storage storage str"
-        Storage storage str = storages[msg.sender];
-
-        return (str.user, str.amount);
-    }
-
-    function getOwner() public view returns (address) {
-        return owner;
-    }
-}//@audit  Added lincense
-// SPDX-License-Identifier: MIT
-
-// @audit Outdated Compiler version changed from `^0.4.23` to `^0.8.18`
-pragma solidity ^0.8.18;
-
-/**
- * @title Secured/Audited Contract
- * @author Marcellus Ifeanyi
- * @notice This is the Audited Contract that fixes the bugs identified in the `StorageVictim.sol` contract
- */
-
-contract StorageSecured {
-    address immutable owner;
-
-    struct Storage {
-        address user;
-        uint256 amount;
-    }
-
-    mapping(address => Storage) storages;
-
-    //@audit fix the owner initialization by changing `StorageVictim(){}` to use the `constructor(){}` function.
-    constructor() {
-        owner = msg.sender;
-    }
-
-    function store(uint256 amount) public {
-        //@audit fixed uninitialized storage pointer from `Storage str` to `Storage memory str`
-        Storage memory str;
-
-        str.user = msg.sender;
-
-        str.amount = amount;
-
-        storages[msg.sender] = str;
-    }
-
-    function getStore() public view returns (address, uint256) {
-        //@audit fixed uninitialized storage pointer from `Storage str` to ` Storage storage str`
-
+        /// Fixed uninitialized storage pointer by adding storage keyword
         Storage storage str = storages[msg.sender];
 
         return (str.user, str.amount);
