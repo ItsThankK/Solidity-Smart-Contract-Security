@@ -68,3 +68,11 @@ Error: Data location must be "storage", "memory" or "calldata" for variable, but
 ```
 INFO:Slither:StorageFixed.sol analyzed (1 contracts with 93 detectors), 0 result(s) found
 ```
+
+## Fixes explained
+
+- The constructor initializes the owner variable with the address of the sender. 
+- There is a potential issue in this store function: the use of an uninitialized storage pointer `(Storage str;)`. It's safer to create a new instance using `Storage memory str = Storage(msg.sender, _amount);`.
+- Initialize the storage pointer in the store function to avoid potential issues.
+- Consider using a more stable Solidity version to benefit from improvements and security features.
+- Added a license identifier.
